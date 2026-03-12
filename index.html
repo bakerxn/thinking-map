@@ -18,7 +18,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             padding: 20px;
         }.container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             background: white;
             padding: 40px;
@@ -52,16 +52,16 @@
             text-align: center;
         }
 
-        /* MAP SECTION */.map-section {
+        /* MAP */.map-section {
             margin: 50px 0;
-            padding: 30px 20px;
+            padding: 30px 10px 20px;
             background: linear-gradient(to bottom, #ecf0f1 0%, #ffffff 100%);
             border-radius: 8px;
         }.legend {
             display: flex;
             justify-content: center;
             gap: 24px;
-            margin-bottom: 30px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }.legend-item {
             display: flex;
@@ -73,90 +73,68 @@
             width: 14px;
             height: 14px;
             border-radius: 50%;
+            flex-shrink: 0;
         }.legend-dot.human { background: #3498db; }.legend-dot.shared { background: #9b59b6; }.legend-dot.risk   { background: #95a5a6; }.loop-note {
             text-align: center;
             font-size: 0.78em;
             color: #aaa;
             font-style: italic;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        /* VERTICAL FLOW */.flow-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            padding: 10px 0;
-        }.flow-row {
-            display: flex;
-            align-items: center;
+        #map-container {
             width: 100%;
-            max-width: 600px;
-            position: relative;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* Left gutter for back-loop arrows */.loop-gutter {
-            width: 60px;
-            flex-shrink: 0;
-            position: relative;
-            align-self: stretch;
+        #map-svg {
+            display: block;
+            min-width: 640px;
+            margin: 0 auto;
         }
 
-        /* Node button */.flow-node {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 16px 20px;
+        /* Nodes — no transform on hover, just filter */.map-node {
             cursor: pointer;
-            transition: all 0.25s ease;
-            text-align: left;
-            font-family: 'Georgia', serif;
-            position: relative;
-        }.flow-node:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-        }.flow-node.active {
-            border-color: currentColor;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }.node-dot {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }.node-label {
-            font-size: 1em;
+        }.map-node:focus {
+            outline: none;
+        }.map-node:focus.node-circle {
+            stroke: #f39c12;
+            stroke-width: 4;
+            filter: drop-shadow(0 0 8px #f39c12);
+        }.map-node:hover.node-circle {
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.35));
+        }.map-node.active.node-circle {
+            stroke-width: 4;
+            stroke: #2c3e50;
+            filter: drop-shadow(0 0 14px rgba(0,0,0,0.4));
+        }.node-circle {
+            transition: filter 0.25s ease, stroke-width 0.25s ease;
+        }.node-label-main {
+            font-size: 12px;
             font-weight: 700;
-            color: #2c3e50;
-        }.node-sublabel {
-            font-size: 0.78em;
-            color: #95a5a6;
-            font-style: italic;
-            margin-top: 2px;
-        }
-
-        /* Forward arrow between nodes */.flow-arrow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 600px;
-            padding-left: 60px; /* aligns with node, not gutter */
-            height: 32px;
-            color: #bdc3c7;
-            font-size: 1.4em;
-        }
-
-        /* SVG for back-loop arrows — overlays the left gutter */.loop-svg {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 60px;
+            fill: #ffffff;
+            text-anchor: middle;
             pointer-events: none;
+            font-family: 'Georgia', serif;
+        }.node-label-sub {
+            font-size: 10px;
+            fill: rgba(255,255,255,0.82);
+            text-anchor: middle;
+            pointer-events: none;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+        }.connection-fwd {
+            stroke: #bdc3c7;
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.7;
+        }.connection-back {
+            stroke: #c8a97e;
+            stroke-width: 1.5;
+            fill: none;
+            opacity: 0.55;
+            stroke-dasharray: 5, 4;
         }
 
         /* CONTEXT PANEL */.context-panel {
@@ -165,15 +143,17 @@
             background: #f8f9fa;
             border-left: 5px solid #3498db;
             border-radius: 8px;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease;
         }.context-panel.hidden {
-            opacity: 0.4;
+            opacity: 0.45;
         }.placeholder-text {
             color: #95a5a6;
             font-style: italic;
             text-align: center;
             padding: 30px;
-        }.context-panel h2 {
+        }
+
+        #context-content h2 {
             color: #2c3e50;
             font-size: 1.7em;
             margin-bottom: 6px;
@@ -200,7 +180,7 @@
             font-weight: bold;
         }
 
-        /* REFLECTION BOX */.reflection-box {
+        /* REFLECTION */.reflection-box {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
@@ -257,20 +237,21 @@
             cursor: pointer;
             font-size: 1em;
             font-family: 'Georgia', serif;
-            transition: all 0.3s ease;
-        }.toggle-button:hover {
+            transition: background 0.3s ease;
+        }.toggle-button:hover,.toggle-button:focus {
             background: #2c3e50;
-            transform: translateY(-2px);
+            outline: 3px solid #f39c12;
+            outline-offset: 2px;
         }.transparency-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease;
         }.transparency-content.open {
-            max-height: 1200px;
+            max-height: 1400px;
             margin-top: 20px;
         }.transparency-content h3 {
             color: #34495e;
-            margin: 20px 0 8px 0;
+            margin: 20px 0 8px;
         }.transparency-content p,.transparency-content ul {
             color: #7f8c8d;
             margin: 8px 0;
@@ -281,8 +262,8 @@
 
         /* FOOTER */
         footer {
-            max-width: 900px;
-            margin: 24px auto 10px auto;
+            max-width: 1100px;
+            margin: 24px auto 10px;
             padding: 20px 40px;
             display: flex;
             align-items: center;
@@ -295,12 +276,32 @@
             color: #7f8c8d;
         }
 
-        @media (max-width: 600px) {.container { padding: 20px; }
-            h1 { font-size: 1.8em; }.flow-arrow { padding-left: 60px; }
+        /* Skip link for keyboard/screen reader users */.skip-link {
+            position: absolute;
+            top: -999px;
+            left: 0;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 4px;
+            font-family: 'Georgia', serif;
+            font-size: 0.95em;
+            z-index: 9999;
+            text-decoration: none;
+        }.skip-link:focus {
+            top: 10px;
+        }
+
+        @media (max-width: 700px) {.container { padding: 20px; }
+            h1 { font-size: 1.8em; }
         }
     </style>
 </head>
 <body>
+
+<!-- Skip navigation for screen readers / keyboard users -->
+<a href="#context-panel" class="skip-link">Skip to node details</a>
+
 <div class="container">
 
     <header>
@@ -312,22 +313,42 @@
         </p>
     </header>
 
-    <section class="map-section">
-        <div class="legend">
-            <div class="legend-item"><div class="legend-dot human"></div> Human Judgment Heavy</div>
-            <div class="legend-item"><div class="legend-dot shared"></div> Shared Space</div>
-            <div class="legend-item"><div class="legend-dot risk"></div> High AI Risk Zone</div>
+    <section class="map-section" aria-label="Interactive research process map">
+        <div class="legend" role="list" aria-label="Map legend">
+            <div class="legend-item" role="listitem">
+                <div class="legend-dot human" aria-hidden="true"></div>
+                <span>Human Judgment Heavy</span>
+            </div>
+            <div class="legend-item" role="listitem">
+                <div class="legend-dot shared" aria-hidden="true"></div>
+                <span>Shared Space</span>
+            </div>
+            <div class="legend-item" role="listitem">
+                <div class="legend-dot risk" aria-hidden="true"></div>
+                <span>High AI Risk Zone</span>
+            </div>
         </div>
-        <p class="loop-note">Curved arrows on the left indicate common points where researchers loop back</p>
-
-        <div class="flow-wrapper" id="flow-wrapper">
-            <!-- Nodes and arrows injected by JS -->
+        <p class="loop-note" id="loop-note">
+            Dashed curved arrows indicate common points where the research process loops back
+        </p>
+        <div id="map-container" role="region" aria-label="Research process diagram">
+            <svg id="map-svg"
+                 role="group"
+                 aria-label="Research process nodes. Use Tab to navigate between nodes and Enter or Space to select."
+                 aria-describedby="loop-note">
+            </svg>
         </div>
     </section>
 
-    <section class="context-panel hidden" id="context-panel">
-        <div class="placeholder-text">👆 Click any stage above to explore where thinking happens</div>
-        <div id="context-content" style="display:none;">
+    <section class="context-panel hidden"
+             id="context-panel"
+             aria-live="polite"
+             aria-atomic="true"
+             tabindex="-1">
+        <div class="placeholder-text" id="placeholder-text">
+            👆 Click any stage above to explore where thinking happens
+        </div>
+        <div id="context-content" style="display:none;" aria-label="Stage details">
             <h2 id="node-title"></h2>
             <p class="context-description" id="node-description"></p>
             <div class="context-section">
@@ -336,7 +357,7 @@
             </div>
             <div class="context-section">
                 <h3>🤖 How GenAI Can Help</h3>
-                <ul id="ai-help"></ul>
+                <ul id="ai-help" aria-label="Ways AI can help"></ul>
             </div>
             <div class="context-section">
                 <h3>⚠️ What Goes Wrong When Over-Delegating to GenAI</h3>
@@ -349,7 +370,7 @@
         </div>
     </section>
 
-    <section class="reflection-box">
+    <section class="reflection-box" aria-label="Reflection prompts">
         <h2>🧭 Pause & Reflect</h2>
         <p>Before moving on, consider your own relationship with these stages:</p>
         <div class="reflection-prompts">
@@ -368,7 +389,7 @@
         </div>
     </section>
 
-    <section class="class-use">
+    <section class="class-use" aria-label="Class discussion activities">
         <h2>📚 For Class Discussion</h2>
         <ul>
             <li><strong>Small Group Activity:</strong> In groups of 3–4, trace the path you actually took in your last research paper. Where did it diverge from this map?</li>
@@ -379,11 +400,18 @@
         </ul>
     </section>
 
-    <section class="ai-transparency">
-        <button class="toggle-button" onclick="toggleTransparency()">
+    <section class="ai-transparency" aria-label="AI transparency disclosure">
+        <button class="toggle-button"
+                onclick="toggleTransparency()"
+                aria-expanded="false"
+                aria-controls="transparency-content"
+                id="transparency-btn">
             🔍 How Was This Made? (AI Transparency)
         </button>
-        <div class="transparency-content" id="transparency-content">
+        <div class="transparency-content"
+             id="transparency-content"
+             role="region"
+             aria-labelledby="transparency-btn">
             <h3>Tools Used</h3>
             <ul>
                 <li><strong>Claude (Anthropic)</strong> — Conceptual framework development, content generation, code structure</li>
@@ -391,12 +419,12 @@
             </ul>
             <h3>Process</h3>
             <p><strong>1. Human Input:</strong> The librarian provided a course description, learning objectives, and initial concept for an interactive map exploring cognitive labor in academic writing.</p>
-            <p><strong>2. AI Assistance:</strong> Claude generated the node structure, content for each stage of the writing process, and the HTML/CSS/JavaScript implementation.</p>
-            <p><strong>3. Human Refinement:</strong> The librarian reviewed all content for accuracy, pedagogical appropriateness, and alignment with course philosophy. Reflection prompts and class discussion activities were collaboratively developed.</p>
+            <p><strong>2. AI Assistance:</strong> Claude generated the node structure, content for each stage, and the HTML/CSS/JavaScript implementation.</p>
+            <p><strong>3. Human Refinement:</strong> The librarian reviewed all content for accuracy, pedagogical appropriateness, and alignment with course philosophy.</p>
             <h3>What Was Human-Driven</h3>
             <ul>
                 <li>Pedagogical goals and learning outcomes</li>
-                <li>Decision to frame thinking as distributed across tasks (not binary human/AI)</li>
+                <li>Decision to frame thinking as distributed across tasks, not binary human/AI</li>
                 <li>Choice to avoid prescriptive "right answers"</li>
                 <li>Final approval of all content and design choices</li>
             </ul>
@@ -415,37 +443,40 @@
 </div>
 
 <footer>
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Creative Commons BY-NC-SA 4.0 License (opens in new tab)">
         <img
             src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png"
-            alt="Creative Commons BY-NC-SA 4.0 License"
+            alt="Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
             style="height:24px; display:block; opacity:0.85; transition:opacity 0.2s ease;"
             onmouseover="this.style.opacity='1'"
             onmouseout="this.style.opacity='0.85'"
         >
     </a>
-    <span style="color:#bdc3c7;">|</span>
+    <span style="color:#bdc3c7;" aria-hidden="true">|</span>
     <span>
         Created by
-        <a
-            href="https://www.linkedin.com/in/nicole-baker/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="color:#2c3e50; font-weight:bold; text-decoration:none; border-bottom:1px solid #bdc3c7; transition:color 0.2s ease, border-color 0.2s ease;"
-            onmouseover="this.style.color='#3498db'; this.style.borderColor='#3498db';"
-            onmouseout="this.style.color='#2c3e50'; this.style.borderColor='#bdc3c7';"
+        <a href="https://www.linkedin.com/in/nicole-baker/"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Nicole Baker MSEd MSLIS LinkedIn profile (opens in new tab)"
+           style="color:#2c3e50; font-weight:bold; text-decoration:none; border-bottom:1px solid #bdc3c7; transition:color 0.2s ease, border-color 0.2s ease;"
+           onmouseover="this.style.color='#3498db'; this.style.borderColor='#3498db';"
+           onmouseout="this.style.color='#2c3e50'; this.style.borderColor='#bdc3c7';"
         >Nicole Baker, MSEd MSLIS</a>
     </span>
 </footer>
 
 <script>
+    // ── NODE DATA ──────────────────────────────────────────────────────────────
     const nodes = [
         {
             id: 'inquiry',
-            color: '#3498db',
-            colorName: 'human',
-            label: 'Inquiry & Questioning',
-            sublabel: 'Curiosity · Question Framing',
+            color: '#2980b9',       // darker blue for contrast on white text
+            label: 'Inquiry &\nQuestioning',
+            ariaLabel: 'Inquiry and Questioning',
             description: 'The starting point of all research — noticing what puzzles you and shaping it into a focused, researchable question.',
             humanStrengths: 'Humans bring lived experience, values, and the ability to notice what is absent or troubling in existing conversations. Deciding what is worth asking — and why — is a deeply personal intellectual act that reflects your disciplinary training and your own perspective.',
             aiHelp: [
@@ -458,14 +489,13 @@
         },
         {
             id: 'explore',
-            color: '#9b59b6',
-            colorName: 'shared',
-            label: 'Explore & Search',
-            sublabel: 'Background Reading · Finding Sources',
+            color: '#8e44ad',       // darker purple for contrast
+            label: 'Explore &\nSearch',
+            ariaLabel: 'Explore and Search',
             description: 'Building context through broad reading and then actively searching databases and catalogs for credible, relevant evidence.',
             humanStrengths: 'Humans make strategic decisions about where to search, which terms reflect the actual scholarly conversation, and when a source is worth pursuing. Recognizing a useful source when you find it requires disciplinary intuition that develops through practice.',
             aiHelp: [
-                'Suggest synonyms or related terms to expand your search strategy',
+                'Suggest synonyms or related terms to broaden your search strategy',
                 'Explain how to use Boolean operators or database filters',
                 'Summarize a long article to help you decide if it is worth reading in full'
             ],
@@ -474,14 +504,13 @@
         },
         {
             id: 'evaluate',
-            color: '#3498db',
-            colorName: 'human',
-            label: 'Evaluate Sources',
-            sublabel: 'Credibility · Relevance · Bias',
+            color: '#2980b9',
+            label: 'Evaluate\nSources',
+            ariaLabel: 'Evaluate Sources',
             description: 'Assessing whether the sources you have found are credible, relevant to your specific argument, and honest about their limitations.',
-            humanStrengths: 'Humans apply contextual judgment — understanding why a source might be biased, what agenda it serves, and whether it is trustworthy for your particular purpose. This requires reading carefully, not just checking surface credentials.',
+            humanStrengths: 'Humans apply contextual judgment — understanding why a source might be biased, what agenda it serves, and whether it is trustworthy for your particular purpose. This requires careful reading, not just checking surface credentials.',
             aiHelp: [
-                'Help you identify an author\'s credentials or institutional affiliation',
+                'Help identify an author\'s credentials or institutional affiliation',
                 'Flag potential conflicts of interest in a source',
                 'Compare how different sources frame the same claim'
             ],
@@ -490,10 +519,9 @@
         },
         {
             id: 'argument',
-            color: '#9b59b6',
-            colorName: 'shared',
-            label: 'Develop Your Argument',
-            sublabel: 'Tentative Claim · Structure · Thesis',
+            color: '#8e44ad',
+            label: 'Develop Your\nArgument',
+            ariaLabel: 'Develop Your Argument',
             description: 'Forming a working hypothesis early on, then refining it into a clear thesis and logical structure as your evidence comes together.',
             humanStrengths: 'Humans make judgments about what is true, what is worth defending, and what counts as persuasive to a specific audience. Your argument reflects your intellectual commitments — it cannot be outsourced without becoming someone else\'s argument.',
             aiHelp: [
@@ -506,10 +534,9 @@
         },
         {
             id: 'draft',
-            color: '#95a5a6',
-            colorName: 'risk',
-            label: 'Draft & Revise',
-            sublabel: 'Writing · Refining · Strengthening',
+            color: '#717d7e',       // darker gray for contrast
+            label: 'Draft &\nRevise',
+            ariaLabel: 'Draft and Revise',
             description: 'Translating your argument into prose and then critically refining it — two stages that are deeply intertwined because writing is itself a form of thinking.',
             humanStrengths: 'Humans develop voice, make rhetorical choices, and discover what they actually think through the act of writing. Revision requires honest self-criticism — knowing what to cut, what to keep, and when the argument actually works.',
             aiHelp: [
@@ -522,12 +549,11 @@
         },
         {
             id: 'share',
-            color: '#3498db',
-            colorName: 'human',
-            label: 'Share & Defend',
-            sublabel: 'Presentation · Publication · Discussion',
+            color: '#2980b9',
+            label: 'Share &\nDefend',
+            ariaLabel: 'Share and Defend',
             description: 'Communicating your work to an audience and taking intellectual responsibility for it — in a presentation, a paper submission, or a class discussion.',
-            humanStrengths: 'Humans navigate audience expectations, respond to questions in real time, and stand behind their claims. You are the author. When challenged, the ability to explain and defend your work is the final proof that the thinking was yours.',
+            humanStrengths: 'Humans navigate audience expectations, respond to questions in real time, and stand behind their claims. When challenged, the ability to explain and defend your work is the final proof that the thinking was yours.',
             aiHelp: [
                 'Help simplify complex ideas for a non-specialist audience',
                 'Generate an abstract or executive summary',
@@ -538,156 +564,190 @@
         }
     ];
 
-    // Which nodes have a back-loop arrow returning to which earlier node index
-    // Format: { from: index, to: index, label }
-    const backLoops = [
-        { from: 1, to: 0 }, // Explore & Search → Inquiry & Questioning
-        { from: 2, to: 1 }, // Evaluate Sources → Explore & Search
-        { from: 3, to: 1 }, // Develop Argument → Explore & Search
-        { from: 4, to: 3 }, // Draft & Revise → Develop Your Argument
+    // Forward connections: [fromIndex, toIndex]
+    const forwardLinks = [
+        [0, 1],
+        [1, 2],
+        [2, 3],
+        [3, 4],
+        [4, 5]
     ];
 
-    const wrapper = document.getElementById('flow-wrapper');
-    const NODE_HEIGHT = 72;   // approximate rendered height of each node card
-    const ARROW_HEIGHT = 32;  // height of each forward arrow row
-    const ROW_HEIGHT = NODE_HEIGHT + ARROW_HEIGHT;
+    // Back-loop connections: [fromIndex, toIndex]
+    // Curve direction: 'up' bows above the line, 'down' bows below
+    const backLinks = [
+        { from: 1, to: 0 },   // Explore → Inquiry
+        { from: 2, to: 1 },   // Evaluate → Explore
+        { from: 3, to: 1 },   // Argument → Explore
+        { from: 4, to: 3 },   // Draft → Argument
+    ];
 
-    // Build DOM rows
-    nodes.forEach((node, i) => {
-        // Node row
-        const row = document.createElement('div');
-        row.className = 'flow-row';
-        row.id = `row-${i}`;
+    // ── SVG SETUP ──────────────────────────────────────────────────────────────
+    const SVG_W  = 1000;
+    const SVG_H  = 320;
+    const R      = 52;        // node radius
+    const CY     = 160;       // vertical center
+    const MARGIN = 90;        // left/right margin
 
-        // Left gutter (back-loop arrows drawn here via SVG later)
-        const gutter = document.createElement('div');
-        gutter.className = 'loop-gutter';
-        gutter.id = `gutter-${i}`;
+    const svg = document.getElementById('map-svg');
+    svg.setAttribute('width', SVG_W);
+    svg.setAttribute('height', SVG_H);
+    svg.setAttribute('viewBox', `0 0 ${SVG_W} ${SVG_H}`);
 
-        // Node button
-        const btn = document.createElement('button');
-        btn.className = 'flow-node';
-        btn.id = `node-${node.id}`;
-        btn.style.borderColor = '#e0e0e0';
-        btn.innerHTML = `
-            <div class="node-dot" style="background:${node.color};"></div>
-            <div>
-                <div class="node-label">${node.label}</div>
-                <div class="node-sublabel">${node.sublabel}</div>
-            </div>
-        `;
-        btn.addEventListener('click', () => selectNode(i));
+    const svgNS = 'http://www.w3.org/2000/svg';
 
-        row.appendChild(gutter);
-        row.appendChild(btn);
-        wrapper.appendChild(row);
+    // Compute evenly spaced x positions
+    const spacing = (SVG_W - MARGIN * 2) / (nodes.length - 1);
+    const nodePositions = nodes.map((_, i) => ({
+        x: MARGIN + i * spacing,
+        y: CY
+    }));
 
-        // Forward arrow (not after last node)
-        if (i < nodes.length - 1) {
-            const arrowRow = document.createElement('div');
-            arrowRow.className = 'flow-arrow';
-            arrowRow.innerHTML = `<span style="color:#bdc3c7; font-size:1.6em;">↓</span>`;
-            wrapper.appendChild(arrowRow);
-        }
-    });
+    // ── DEFS: arrowhead markers ────────────────────────────────────────────────
+    const defs = document.createElementNS(svgNS, 'defs');
 
-    // Draw back-loop SVG arrows after layout is painted
-    window.addEventListener('load', () => {
-        drawLoops();
-    });
-
-    window.addEventListener('resize', () => {
-        // Remove old SVGs and redraw
-        document.querySelectorAll('.loop-svg').forEach(el => el.remove());
-        drawLoops();
-    });
-
-    function drawLoops() {
-        backLoops.forEach(loop => {
-            const fromRow = document.getElementById(`row-${loop.from}`);
-            const toRow   = document.getElementById(`row-${loop.to}`);
-            const gutter  = document.getElementById(`gutter-${loop.from}`);
-
-            if (!fromRow || !toRow || !gutter) return;
-
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const fromRect    = fromRow.getBoundingClientRect();
-            const toRect      = toRow.getBoundingClientRect();
-
-            // Heights relative to wrapper
-            const fromY = fromRect.top - wrapperRect.top + fromRect.height / 2;
-            const toY   = toRect.top  - wrapperRect.top + toRect.height / 2;
-            const svgH  = fromY - toY + 10;
-
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('class', 'loop-svg');
-            svg.style.position = 'absolute';
-            svg.style.left = '0';
-            // Position SVG so it spans from toRow up to fromRow
-            svg.style.top  = (toRect.top - wrapperRect.top + toRect.height / 2 - 5) + 'px';
-            svg.style.width = '60px';
-            svg.style.height = svgH + 'px';
-            svg.style.overflow = 'visible';
-            svg.style.pointerEvents = 'none';
-
-            // Arrow path: starts at bottom of SVG (fromRow), curves left, ends at top (toRow)
-            const x1 = 50, y1 = svgH - 5;  // from point (bottom)
-            const x2 = 50, y2 = 5;          // to point (top)
-            const cx = 10;                   // control point x (how far left the curve bows)
-
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-            const markerId = `arrow-back-${loop.from}-${loop.to}`;
-            marker.setAttribute('id', markerId);
-            marker.setAttribute('markerWidth', '7');
-            marker.setAttribute('markerHeight', '7');
-            marker.setAttribute('refX', '6');
-            marker.setAttribute('refY', '3');
-            marker.setAttribute('orient', 'auto');
-            const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            arrowPath.setAttribute('d', 'M0,0 L0,6 L7,3 z');
-            arrowPath.setAttribute('fill', '#e0c9a6');
-            marker.appendChild(arrowPath);
-            defs.appendChild(marker);
-            svg.appendChild(defs);
-
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', `M ${x1} ${y1} C ${cx} ${y1} ${cx} ${y2} ${x2} ${y2}`);
-            path.setAttribute('fill', 'none');
-            path.setAttribute('stroke', '#e0c9a6');
-            path.setAttribute('stroke-width', '1.5');
-            path.setAttribute('stroke-dasharray', '5,4');
-            path.setAttribute('marker-end', `url(#${markerId})`);
-            svg.appendChild(path);
-
-            // Append SVG to the wrapper (positioned absolutely relative to it)
-            wrapper.style.position = 'relative';
-            wrapper.appendChild(svg);
-        });
+    function makeMarker(id, color) {
+        const marker = document.createElementNS(svgNS, 'marker');
+        marker.setAttribute('id', id);
+        marker.setAttribute('markerWidth', '8');
+        marker.setAttribute('markerHeight', '8');
+        marker.setAttribute('refX', '7');
+        marker.setAttribute('refY', '3');
+        marker.setAttribute('orient', 'auto');
+        const p = document.createElementNS(svgNS, 'path');
+        p.setAttribute('d', 'M0,0 L0,6 L8,3 z');
+        p.setAttribute('fill', color);
+        marker.appendChild(p);
+        defs.appendChild(marker);
     }
 
-    // Node selection
+    makeMarker('arrow-fwd', '#bdc3c7');
+    makeMarker('arrow-back', '#c8a97e');
+    svg.appendChild(defs);
+
+    // ── DRAW FORWARD CONNECTIONS ───────────────────────────────────────────────
+    forwardLinks.forEach(([fi, ti]) => {
+        const fp = nodePositions[fi];
+        const tp = nodePositions[ti];
+
+        // Shorten line so it stops at circle edge
+        const dx = tp.x - fp.x;
+        const dy = tp.y - fp.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const ux = dx / dist;
+        const uy = dy / dist;
+
+        const x1 = fp.x + ux * (R + 2);
+        const y1 = fp.y + uy * (R + 2);
+        const x2 = tp.x - ux * (R + 8);
+        const y2 = tp.y - uy * (R + 8);
+
+        const line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('class', 'connection-fwd');
+        line.setAttribute('marker-end', 'url(#arrow-fwd)');
+        line.setAttribute('aria-hidden', 'true');
+        svg.appendChild(line);
+    });
+
+    // ── DRAW BACK-LOOP CONNECTIONS ─────────────────────────────────────────────
+    backLinks.forEach(({ from, to }, idx) => {
+        const fp = nodePositions[from];
+        const tp = nodePositions[to];
+
+        // Alternate bowing above/below so loops don't overlap
+        const bowDir = idx % 2 === 0 ? -1 : 1;
+        const bowAmount = 70 + idx * 18;
+
+        const midX = (fp.x + tp.x) / 2;
+        const midY = fp.y + bowDir * bowAmount;
+
+        const path = document.createElementNS(svgNS, 'path');
+        const d = `M ${fp.x} ${fp.y - R} Q ${midX} ${midY} ${tp.x} ${tp.y - R}`;
+        path.setAttribute('d', d);
+        path.setAttribute('class', 'connection-back');
+        path.setAttribute('marker-end', 'url(#arrow-back)');
+        path.setAttribute('aria-hidden', 'true');
+        svg.appendChild(path);
+    });
+
+    // ── DRAW NODES ─────────────────────────────────────────────────────────────
+    nodes.forEach((node, i) => {
+        const { x, y } = nodePositions[i];
+
+        const g = document.createElementNS(svgNS, 'g');
+        g.setAttribute('class', 'map-node');
+        g.setAttribute('role', 'button');
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('aria-label', `${node.ariaLabel} — click to learn more`);
+        g.setAttribute('aria-pressed', 'false');
+        g.setAttribute('data-index', i);
+
+        // Circle
+        const circle = document.createElementNS(svgNS, 'circle');
+        circle.setAttribute('cx', x);
+        circle.setAttribute('cy', y);
+        circle.setAttribute('r', R);
+        circle.setAttribute('fill', node.color);
+        circle.setAttribute('stroke', '#2c3e50');
+        circle.setAttribute('stroke-width', '2');
+        circle.setAttribute('class', 'node-circle');
+        g.appendChild(circle);
+
+        // Label — split on \n
+        const lines = node.label.split('\n');
+        const lineHeight = 15;
+        const totalH = lines.length * lineHeight;
+        lines.forEach((line, li) => {
+            const t = document.createElementNS(svgNS, 'text');
+            t.setAttribute('x', x);
+            t.setAttribute('y', y - totalH / 2 + li * lineHeight + lineHeight * 0.8);
+            t.setAttribute('class', 'node-label-main');
+            t.textContent = line;
+            g.appendChild(t);
+        });
+
+        // Click
+        g.addEventListener('click', () => selectNode(i));
+
+        // Keyboard: Enter or Space
+        g.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectNode(i);
+            }
+        });
+
+        svg.appendChild(g);
+    });
+
+    // ── NODE SELECTION ─────────────────────────────────────────────────────────
     function selectNode(index) {
         const node = nodes[index];
 
-        document.querySelectorAll('.flow-node').forEach(btn => {
-            btn.classList.remove('active');
-            btn.style.borderColor = '#e0e0e0';
-            btn.style.boxShadow = '';
+        // Update ARIA + active state on all nodes
+        document.querySelectorAll('.map-node').forEach((g, i) => {
+            g.classList.remove('active');
+            g.setAttribute('aria-pressed', 'false');
         });
 
-        const activeBtn = document.getElementById(`node-${node.id}`);
-        activeBtn.classList.add('active');
-        activeBtn.style.borderColor = node.color;
-        activeBtn.style.boxShadow = `0 4px 20px ${node.color}44`;
+        const activeG = document.querySelector(`[data-index="${index}"]`);
+        activeG.classList.add('active');
+        activeG.setAttribute('aria-pressed', 'true');
 
+        // Populate panel
         const panel = document.getElementById('context-panel');
         panel.classList.remove('hidden');
-        document.querySelector('.placeholder-text').style.display = 'none';
-        document.getElementById('context-content').style.display = 'block';
         panel.style.borderLeftColor = node.color;
 
-        document.getElementById('node-title').textContent = node.label;
+        document.getElementById('placeholder-text').style.display = 'none';
+        const content = document.getElementById('context-content');
+        content.style.display = 'block';
+
+        document.getElementById('node-title').textContent = node.ariaLabel;
         document.getElementById('node-description').textContent = node.description;
         document.getElementById('human-strengths').textContent = node.humanStrengths;
 
@@ -702,11 +762,17 @@
         document.getElementById('risks').textContent = node.risks;
         document.getElementById('reflection-question').textContent = node.reflection;
 
+        // Smooth scroll & move focus to panel for screen readers
         panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        panel.focus();
     }
 
+    // ── TRANSPARENCY TOGGLE ────────────────────────────────────────────────────
     function toggleTransparency() {
-        document.getElementById('transparency-content').classList.toggle('open');
+        const content = document.getElementById('transparency-content');
+        const btn = document.getElementById('transparency-btn');
+        const isOpen = content.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     }
 </script>
 </body>
