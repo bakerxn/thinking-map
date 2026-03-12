@@ -76,7 +76,7 @@
 
         #thinking-map {
             position: relative;
-            height: 600px;
+            height: 650px;
             margin: 0 auto;
         }
 
@@ -104,7 +104,13 @@
             stroke: #bdc3c7;
             stroke-width: 2;
             fill: none;
-            opacity: 0.4;
+            opacity: 0.6;
+        }.connection-back {
+            stroke: #e67e22;
+            stroke-width: 1.5;
+            fill: none;
+            opacity: 0.5;
+            stroke-dasharray: 6, 4;
         }.context-panel {
             margin: 40px 0;
             padding: 30px;
@@ -207,6 +213,26 @@
         }.transparency-content p,.transparency-content ul {
             color: #7f8c8d;
             margin: 10px 0;
+        }.loop-legend {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-size: 0.82em;
+            color: #7f8c8d;
+            font-style: italic;
+        }.loop-legend-line {
+            width: 36px;
+            height: 2px;
+            background: repeating-linear-gradient(
+                to right,
+                #e67e22 0px,
+                #e67e22 6px,
+                transparent 6px,
+                transparent 10px
+            );
+            display: inline-block;
         }
 
         @media (max-width: 768px) {.container {
@@ -220,7 +246,7 @@
             }
 
             #thinking-map {
-                height: 800px;
+                height: 900px;
             }.reflection-prompts {
                 grid-template-columns: 1fr;
             }
@@ -259,6 +285,10 @@
             </div>
             <div id="thinking-map">
                 <svg id="map-svg"></svg>
+            </div>
+            <div class="loop-legend">
+                <span class="loop-legend-line"></span>
+                <span>Dashed orange arrows indicate iterative return paths</span>
             </div>
         </section>
 
@@ -369,167 +399,280 @@
         </section>
     </div>
 
+    <footer style="
+        max-width: 1200px;
+        margin: 24px auto 10px auto;
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        border-top: 2px solid #bdc3c7;
+        font-family: 'Georgia', serif;
+        font-size: 0.85em;
+        color: #7f8c8d;
+    ">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">
+            <img 
+                src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png"
+                alt="Creative Commons BY-NC-SA 4.0 License"
+                style="height: 24px; display: block; opacity: 0.85; transition: opacity 0.2s ease;"
+                onmouseover="this.style.opacity='1'"
+                onmouseout="this.style.opacity='0.85'"
+            >
+        </a>
+        <span style="color: #bdc3c7;">|</span>
+        <span>
+            Created by 
+            <a 
+                href="https://www.linkedin.com/in/nicole-baker/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style="
+                    color: #2c3e50;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-bottom: 1px solid #bdc3c7;
+                    transition: color 0.2s ease, border-color 0.2s ease;
+                "
+                onmouseover="this.style.color='#3498db'; this.style.borderColor='#3498db';"
+                onmouseout="this.style.color='#2c3e50'; this.style.borderColor='#bdc3c7';"
+            >Nicole Baker, M.S.Ed., M.S.L.I.S.</a>
+        </span>
+    </footer>
+
     <script>
-        // Node data structure
         const nodes = {
             curiosity: {
-                x: 100, y: 300,
+                x: 80, y: 320,
                 color: '#3498db',
                 title: 'Curiosity',
-                description: 'The spark that begins inquiry—noticing what puzzles you or what matters.',
-                humanStrengths: 'Humans bring lived experience, emotional resonance, and the ability to notice what\'s absent or troubling in existing conversations. Curiosity is deeply personal.',
+                description: 'The root of all inquiry — noticing what puzzles you, troubles you, or matters to you.',
+                humanStrengths: 'Humans bring lived experience, emotional resonance, and the ability to notice what\'s absent or troubling in existing conversations. Curiosity is deeply personal and cannot be manufactured.',
                 aiHelp: [
                     'Suggest related topics or emerging trends in a field',
                     'Generate "what if" questions to spark exploration',
-                    'Identify gaps in existing literature'
+                    'Identify gaps in existing conversations'
                 ],
-                risks: 'You end up researching what\'s algorithmically popular rather than what genuinely matters to you. Your question becomes generic.',
+                risks: 'You end up researching what\'s algorithmically popular rather than what genuinely matters to you. Your question becomes generic before it even begins.',
                 reflection: 'Can AI be curious? Or does it only simulate the language of curiosity?'
             },
             questionFraming: {
-                x: 280, y: 200,
+                x: 240, y: 200,
                 color: '#3498db',
                 title: 'Question Framing',
-                description: 'Turning curiosity into a focused, researchable question.',
+                description: 'Turning curiosity into a focused, researchable question — your first real intellectual commitment.',
                 humanStrengths: 'Humans understand disciplinary conventions, feasibility, and what makes a question worth asking. You decide what counts as an answer.',
                 aiHelp: [
                     'Rewrite questions for clarity or specificity',
-                    'Suggest question frameworks (e.g., "How does X affect Y?")',
+                    'Suggest question frameworks (e.g., "How does X affect Y in context Z?")',
                     'Identify assumptions embedded in your phrasing'
                 ],
-                risks: 'Your question becomes technically well-formed but intellectually shallow. You lose the "why does this matter?" thread.',
-                reflection: 'Who decides what counts as a good question—you, your discipline, or the AI\'s training data?'
-            },
-            backgroundReading: {
-                x: 400, y: 100,
-                color: '#9b59b6',
-                title: 'Background Reading',
-                description: 'Building context and understanding the scholarly conversation.',
-                humanStrengths: 'Humans synthesize across texts, notice contradictions, and develop intuition about which sources matter. You read with purpose.',
-                aiHelp: [
-                    'Summarize long articles or chapters',
-                    'Identify key concepts and definitions',
-                    'Create annotated reading lists'
-                ],
-                risks: 'You mistake summaries for understanding. You don\'t develop the "feel" for a field that comes from sustained reading.',
-                reflection: 'What do you lose when you read a summary instead of the original text?'
+                risks: 'Your question becomes technically well-formed but intellectually shallow. You lose the "why does this matter?" thread before you\'ve even started.',
+                reflection: 'Who decides what counts as a good question — you, your discipline, or the AI\'s training data?'
             },
             claimThesis: {
-                x: 400, y: 300,
+                x: 240, y: 440,
                 color: '#3498db',
-                title: 'Claim/Thesis',
-                description: 'Articulating your central argument or contribution.',
-                humanStrengths: 'Humans make judgments about what\'s true, important, or worth defending. A thesis reflects your intellectual commitments.',
+                title: 'Tentative Claim',
+                description: 'An early hypothesis or working thesis — your best guess before the evidence is in. Expect it to change.',
+                humanStrengths: 'Humans make judgments about what might be true based on prior knowledge and instinct. A tentative claim reflects your intellectual starting point, not your conclusion.',
                 aiHelp: [
-                    'Generate multiple thesis variations',
+                    'Generate multiple working thesis variations to consider',
                     'Check if your claim is specific and arguable',
-                    'Suggest counterarguments to sharpen your position'
+                    'Suggest what evidence would be needed to support or refute it'
                 ],
-                risks: 'Your thesis sounds sophisticated but doesn\'t reflect what you actually think. You defend a claim you don\'t believe.',
-                reflection: 'If an AI writes your thesis, whose argument is it?'
+                risks: 'You treat an AI-generated thesis as your own position before you\'ve done the work to actually hold it. You defend a claim you don\'t understand.',
+                reflection: 'What\'s the difference between a hypothesis and a thesis? At what point does your tentative claim become a real argument?'
+            },
+            backgroundReading: {
+                x: 420, y: 120,
+                color: '#9b59b6',
+                title: 'Background Reading',
+                description: 'Building context and understanding the scholarly conversation before diving into focused searching.',
+                humanStrengths: 'Humans synthesize across texts, notice contradictions, and develop intuition about which sources matter. You read with purpose and bring your own interpretive lens.',
+                aiHelp: [
+                    'Summarize long articles or chapters to orient yourself',
+                    'Identify key concepts, debates, and definitions in a field',
+                    'Suggest foundational texts or major scholars in an area'
+                ],
+                risks: 'You mistake summaries for understanding. You don\'t develop the "feel" for a field that comes from sustained, effortful reading.',
+                reflection: 'What do you lose when you read a summary instead of the original text? What can\'t be summarized?'
+            },
+            findingSources: {
+                x: 560, y: 300,
+                color: '#3498db',
+                title: 'Finding Sources',
+                description: 'Actively searching databases, catalogs, and archives to locate credible, relevant evidence for your argument.',
+                humanStrengths: 'Humans make strategic decisions about where to search, which search terms reflect the actual scholarly conversation, and when to stop. Knowing what you\'re looking for — and recognizing it when you find it — requires disciplinary judgment.',
+                aiHelp: [
+                    'Suggest synonyms or related search terms to expand your strategy',
+                    'Explain how to use Boolean operators or database filters',
+                    'Help you understand what type of source fits your need'
+                ],
+                risks: 'AI tools frequently hallucinate citations — inventing plausible-sounding but nonexistent sources. Never use AI to generate a list of sources. Use library databases, Google Scholar, and your librarian instead.',
+                reflection: 'Where you search shapes what you find. What does your search strategy reveal about your assumptions?'
             },
             sourceEvaluation: {
-                x: 600, y: 100,
+                x: 700, y: 160,
                 color: '#3498db',
                 title: 'Source Evaluation',
-                description: 'Assessing credibility, relevance, and bias in your sources.',
-                humanStrengths: 'Humans apply contextual judgment—understanding why a source might be biased, what its agenda is, and whether it\'s trustworthy for your purpose.',
+                description: 'Assessing credibility, relevance, bias, and quality in the sources you\'ve found.',
+                humanStrengths: 'Humans apply contextual judgment — understanding why a source might be biased, what its agenda is, and whether it\'s trustworthy for your specific purpose.',
                 aiHelp: [
                     'Check publication credentials and author expertise',
                     'Identify potential conflicts of interest',
-                    'Compare claims across multiple sources'
+                    'Compare claims across multiple sources for consistency'
                 ],
-                risks: 'You rely on surface markers of credibility (journal name, citation count) without understanding methodological quality or rhetorical moves.',
-                reflection: 'Can AI detect when a source is technically accurate but misleading?'
-            },
-            drafting: {
-                x: 750, y: 150,
-                color: '#95a5a6',
-                title: 'Drafting',
-                description: 'Putting ideas into sentences and paragraphs.',
-                humanStrengths: 'Humans develop voice, make rhetorical choices, and discover new ideas through the act of writing. Drafting is thinking.',
-                aiHelp: [
-                    'Overcome writer\'s block with starter sentences',
-                    'Generate transitions between ideas',
-                    'Expand bullet points into prose'
-                ],
-                risks: 'You outsource the cognitive work of translating thought into language. Your writing becomes fluent but empty—you don\'t know what you think.',
-                reflection: 'Is drafting just "putting ideas into words," or is it how you figure out what you mean?'
+                risks: 'You rely on surface markers of credibility (journal name, citation count) without understanding methodological quality or the rhetorical moves a source is making.',
+                reflection: 'Can AI detect when a source is technically accurate but misleading? What would that even require?'
             },
             argumentStructure: {
-                x: 600, y: 300,
+                x: 820, y: 320,
                 color: '#9b59b6',
                 title: 'Argument Structure',
-                description: 'Organizing claims, evidence, and reasoning into a logical flow.',
-                humanStrengths: 'Humans decide what counts as persuasive, how much evidence is enough, and which objections must be addressed. Structure reflects strategic thinking.',
+                description: 'Organizing claims, evidence, and reasoning into a logical, persuasive flow — and finalizing your thesis.',
+                humanStrengths: 'Humans decide what counts as persuasive, how much evidence is enough, and which objections must be addressed. Structure reflects strategic thinking about your audience and purpose.',
                 aiHelp: [
-                    'Suggest organizational patterns (e.g., problem-solution, chronological)',
-                    'Identify logical gaps or weak transitions',
-                    'Generate outlines from messy notes'
+                    'Suggest organizational patterns (e.g., problem-solution, comparative)',
+                    'Identify logical gaps or weak transitions in an outline',
+                    'Generate outlines from messy notes to react to and revise'
                 ],
-                risks: 'Your paper is well-organized but doesn\'t build toward anything. Form without substance.',
-                reflection: 'Does AI understand the difference between logical structure and persuasive structure?'
+                risks: 'Your paper is well-organized but doesn\'t build toward anything. You have form without substance — a skeleton with no argument inside it.',
+                reflection: 'Does AI understand the difference between logical structure and persuasive structure? Can it know what your audience needs to be convinced?'
+            },
+            drafting: {
+                x: 960, y: 160,
+                color: '#95a5a6',
+                title: 'Drafting',
+                description: 'Putting ideas into sentences and paragraphs — the act of writing as a form of thinking.',
+                humanStrengths: 'Humans develop voice, make rhetorical choices, and discover new ideas through the act of writing itself. Drafting is not transcription — it is cognition.',
+                aiHelp: [
+                    'Overcome writer\'s block with starter sentences to react to',
+                    'Generate transitions between ideas',
+                    'Expand bullet points into prose as a starting scaffold'
+                ],
+                risks: 'You outsource the cognitive work of translating thought into language. Your writing becomes fluent but empty — and you don\'t know what you think because you never had to figure it out.',
+                reflection: 'Is drafting just "putting ideas into words," or is it how you figure out what you mean? What do you discover when you write?'
             },
             revision: {
-                x: 850, y: 300,
+                x: 960, y: 440,
                 color: '#9b59b6',
                 title: 'Revision',
-                description: 'Refining arguments, clarifying prose, and strengthening evidence.',
-                humanStrengths: 'Humans make judgment calls about what to cut, what to emphasize, and when "good enough" is actually good enough. Revision requires self-criticism.',
+                description: 'Refining arguments, clarifying prose, and strengthening evidence — often the most intellectually demanding stage.',
+                humanStrengths: 'Humans make judgment calls about what to cut, what to emphasize, and when "good enough" is actually good enough. Revision requires honest self-criticism.',
                 aiHelp: [
-                    'Identify unclear sentences or jargon',
+                    'Identify unclear sentences or discipline-specific jargon',
                     'Suggest stronger verbs or more precise language',
-                    'Check for consistency in tone and argument'
+                    'Check for consistency in tone and argument across sections'
                 ],
-                risks: 'You polish surface-level prose without interrogating whether your argument actually works. Clarity without insight.',
-                reflection: 'What\'s the difference between editing and revising?'
+                risks: 'You polish surface-level prose without interrogating whether your argument actually works. You achieve clarity without insight.',
+                reflection: 'What\'s the difference between editing and revising? Can you revise work you didn\'t draft yourself?'
             },
             publicCommunication: {
-                x: 1000, y: 300,
+                x: 1080, y: 320,
                 color: '#3498db',
                 title: 'Public Communication',
-                description: 'Sharing your work with an audience—presentation, publication, dialogue.',
-                humanStrengths: 'Humans navigate audience expectations, respond to questions in real-time, and take intellectual responsibility for their claims.',
+                description: 'Sharing your work with an audience — presentation, publication, discussion, defense.',
+                humanStrengths: 'Humans navigate audience expectations, respond to questions in real-time, and take intellectual responsibility for their claims. You are the author.',
                 aiHelp: [
                     'Generate presentation slides or abstracts',
-                    'Suggest ways to simplify complex ideas for non-experts',
-                    'Anticipate audience questions'
+                    'Suggest ways to simplify complex ideas for non-expert audiences',
+                    'Anticipate likely audience questions'
                 ],
-                risks: 'You present work you can\'t defend. When challenged, you don\'t understand your own argument well enough to respond.',
-                reflection: 'If you can\'t explain your work without AI assistance, is it really yours?'
+                risks: 'You present work you can\'t defend. When challenged, you don\'t understand your own argument well enough to respond. The gap between your words and your knowledge becomes visible.',
+                reflection: 'If you can\'t explain your work without AI assistance, is it really yours? What does intellectual ownership actually mean?'
             }
         };
 
-        // Connections between nodes
+        // Forward connections (solid gray)
         const connections = [
             ['curiosity', 'questionFraming'],
             ['questionFraming', 'backgroundReading'],
             ['questionFraming', 'claimThesis'],
-            ['backgroundReading', 'sourceEvaluation'],
-            ['sourceEvaluation', 'drafting'],
-            ['drafting', 'argumentStructure'],
-            ['claimThesis', 'argumentStructure'],
+            ['backgroundReading', 'findingSources'],
+            ['claimThesis', 'findingSources'],
+            ['findingSources', 'sourceEvaluation'],
+            ['sourceEvaluation', 'argumentStructure'],
+            ['argumentStructure', 'drafting'],
             ['argumentStructure', 'revision'],
-            ['revision', 'publicCommunication']
+            ['drafting', 'revision'],
+            ['revision', 'publicCommunication'],
+            ['drafting', 'publicCommunication']
         ];
 
-        // Initialize SVG
+        // Iterative back-loops (dashed orange)
+        const backLoops = [
+            ['findingSources', 'backgroundReading'],
+            ['findingSources', 'questionFraming'],
+            ['sourceEvaluation', 'findingSources'],
+            ['drafting', 'claimThesis'],
+            ['revision', 'argumentStructure'],
+            ['argumentStructure', 'findingSources']
+        ];
+
         const svg = document.getElementById('map-svg');
         const svgNS = "http://www.w3.org/2000/svg";
 
-        // Draw connections first (so they appear behind nodes)
+        // Add arrowhead markers
+        const defs = document.createElementNS(svgNS, 'defs');
+
+        // Forward arrow marker
+        const markerFwd = document.createElementNS(svgNS, 'marker');
+        markerFwd.setAttribute('id', 'arrow-fwd');
+        markerFwd.setAttribute('markerWidth', '8');
+        markerFwd.setAttribute('markerHeight', '8');
+        markerFwd.setAttribute('refX', '6');
+        markerFwd.setAttribute('refY', '3');
+        markerFwd.setAttribute('orient', 'auto');
+        const pathFwd = document.createElementNS(svgNS, 'path');
+        pathFwd.setAttribute('d', 'M0,0 L0,6 L8,3 z');
+        pathFwd.setAttribute('fill', '#bdc3c7');
+        markerFwd.appendChild(pathFwd);
+        defs.appendChild(markerFwd);
+
+        // Back-loop arrow marker
+        const markerBack = document.createElementNS(svgNS, 'marker');
+        markerBack.setAttribute('id', 'arrow-back');
+        markerBack.setAttribute('markerWidth', '8');
+        markerBack.setAttribute('markerHeight', '8');
+        markerBack.setAttribute('refX', '6');
+        markerBack.setAttribute('refY', '3');
+        markerBack.setAttribute('orient', 'auto');
+        const pathBack = document.createElementNS(svgNS, 'path');
+        pathBack.setAttribute('d', 'M0,0 L0,6 L8,3 z');
+        pathBack.setAttribute('fill', '#e67e22');
+        markerBack.appendChild(pathBack);
+        defs.appendChild(markerBack);
+
+        svg.appendChild(defs);
+
+        // Draw forward connections
         connections.forEach(([from, to]) => {
             const line = document.createElementNS(svgNS, 'path');
             const fromNode = nodes[from];
             const toNode = nodes[to];
-            
-            // Create curved path
             const midX = (fromNode.x + toNode.x) / 2;
-            const midY = (fromNode.y + toNode.y) / 2 - 30;
-            
+            const midY = (fromNode.y + toNode.y) / 2 - 25;
             const d = `M ${fromNode.x} ${fromNode.y} Q ${midX} ${midY} ${toNode.x} ${toNode.y}`;
             line.setAttribute('d', d);
             line.setAttribute('class', 'connection');
+            line.setAttribute('marker-end', 'url(#arrow-fwd)');
+            svg.appendChild(line);
+        });
+
+        // Draw back-loop connections
+        backLoops.forEach(([from, to]) => {
+            const line = document.createElementNS(svgNS, 'path');
+            const fromNode = nodes[from];
+            const toNode = nodes[to];
+            const midX = (fromNode.x + toNode.x) / 2;
+            const midY = (fromNode.y + toNode.y) / 2 + 70;
+            const d = `M ${fromNode.x} ${fromNode.y} Q ${midX} ${midY} ${toNode.x} ${toNode.y}`;
+            line.setAttribute('d', d);
+            line.setAttribute('class', 'connection-back');
+            line.setAttribute('marker-end', 'url(#arrow-back)');
             svg.appendChild(line);
         });
 
@@ -539,9 +682,7 @@
             const g = document.createElementNS(svgNS, 'g');
             g.setAttribute('class', 'node');
             g.setAttribute('data-node', nodeId);
-            g.style.cursor = 'pointer';
 
-            // Circle
             const circle = document.createElementNS(svgNS, 'circle');
             circle.setAttribute('cx', node.x);
             circle.setAttribute('cy', node.y);
@@ -551,43 +692,50 @@
             circle.setAttribute('stroke-width', 2);
             circle.style.color = node.color;
 
-            // Text label
             const text = document.createElementNS(svgNS, 'text');
             text.setAttribute('x', node.x);
-            text.setAttribute('y', node.y + 55);
-            text.textContent = node.title;
-            text.style.fontSize = '12px';
-            text.style.textAnchor = 'middle';
+            text.setAttribute('y', node.y + 52);
+
+            // Wrap long titles onto two lines
+            const words = node.title.split(' ');
+            if (words.length > 1) {
+                const tspan1 = document.createElementNS(svgNS, 'tspan');
+                tspan1.setAttribute('x', node.x);
+                tspan1.setAttribute('dy', '0');
+                tspan1.textContent = words.slice(0, Math.ceil(words.length / 2)).join(' ');
+                const tspan2 = document.createElementNS(svgNS, 'tspan');
+                tspan2.setAttribute('x', node.x);
+                tspan2.setAttribute('dy', '14');
+                tspan2.textContent = words.slice(Math.ceil(words.length / 2)).join(' ');
+                text.appendChild(tspan1);
+                text.appendChild(tspan2);
+            } else {
+                text.textContent = node.title;
+            }
 
             g.appendChild(circle);
             g.appendChild(text);
             svg.appendChild(g);
 
-            // Click handler
             g.addEventListener('click', () => selectNode(nodeId));
         });
 
-        // Node selection handler
         let currentNode = null;
 
         function selectNode(nodeId) {
             const node = nodes[nodeId];
-            
-            // Update active state
             document.querySelectorAll('.node').forEach(n => n.classList.remove('active'));
             document.querySelector(`[data-node="${nodeId}"]`).classList.add('active');
 
-            // Update context panel
             const panel = document.getElementById('context-panel');
             panel.classList.remove('hidden');
-            
             document.querySelector('.placeholder-text').style.display = 'none';
             document.getElementById('context-content').style.display = 'block';
 
             document.getElementById('node-title').textContent = node.title;
             document.getElementById('node-description').textContent = node.description;
             document.getElementById('human-strengths').textContent = node.humanStrengths;
-            
+
             const aiHelpList = document.getElementById('ai-help');
             aiHelpList.innerHTML = '';
             node.aiHelp.forEach(item => {
@@ -599,68 +747,22 @@
             document.getElementById('risks').textContent = node.risks;
             document.getElementById('reflection-question').textContent = node.reflection;
 
-            // Smooth scroll to context panel
             panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // AI Transparency toggle
         function toggleTransparency() {
             const content = document.getElementById('transparency-content');
             content.classList.toggle('open');
         }
 
-        // Adjust SVG viewBox for responsiveness
         function adjustViewBox() {
             const mapDiv = document.getElementById('thinking-map');
-            const width = mapDiv.offsetWidth;
             const height = mapDiv.offsetHeight;
-            svg.setAttribute('viewBox', `0 0 1100 ${height}`);
+            svg.setAttribute('viewBox', `0 0 1160 ${height}`);
         }
 
         window.addEventListener('load', adjustViewBox);
         window.addEventListener('resize', adjustViewBox);
     </script>
-<footer style="
-    max-width: 1200px;
-    margin: 24px auto 10px auto;
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    border-top: 2px solid #bdc3c7;
-    font-family: 'Georgia', serif;
-    font-size: 0.85em;
-    color: #7f8c8d;
-">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">
-        <img 
-            src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png"
-            alt="Creative Commons BY-NC-SA 4.0 License"
-            style="height: 24px; display: block; opacity: 0.85; transition: opacity 0.2s ease;"
-            onmouseover="this.style.opacity='1'"
-            onmouseout="this.style.opacity='0.85'"
-        >
-    </a>
-    <span style="color: #bdc3c7;">|</span>
-    <span>
-        Created by 
-        <a 
-            href="https://www.linkedin.com/in/nicole-baker/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style="
-                color: #2c3e50;
-                font-weight: bold;
-                text-decoration: none;
-                border-bottom: 1px solid #bdc3c7;
-                transition: color 0.2s ease, border-color 0.2s ease;
-            "
-            onmouseover="this.style.color='#3498db'; this.style.borderColor='#3498db';"
-            onmouseout="this.style.color='#2c3e50'; this.style.borderColor='#bdc3c7';"
-        >Nicole Baker, MSEd, MSLIS</a>
-    </span>
-</footer>
 </body>
 </html>
