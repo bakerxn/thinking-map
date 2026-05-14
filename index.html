@@ -94,17 +94,17 @@
             margin: 0 auto;
         }
 
-        /* Nodes — no transform on hover, just filter */.map-node {
+        /* Nodes */.map-node {
             cursor: pointer;
         }.map-node:focus {
             outline: none;
-        }.map-node:focus.node-circle {
+        }.map-node:focus .node-circle {
             stroke: #f39c12;
             stroke-width: 4;
             filter: drop-shadow(0 0 8px #f39c12);
-        }.map-node:hover.node-circle {
+        }.map-node:hover .node-circle {
             filter: drop-shadow(0 0 10px rgba(0,0,0,0.35));
-        }.map-node.active.node-circle {
+        }.map-node.active .node-circle {
             stroke-width: 4;
             stroke: #2c3e50;
             filter: drop-shadow(0 0 14px rgba(0,0,0,0.4));
@@ -276,7 +276,7 @@
             color: #7f8c8d;
         }
 
-        /* Skip link for keyboard/screen reader users */.skip-link {
+        /* Skip link */.skip-link {
             position: absolute;
             top: -999px;
             left: 0;
@@ -299,14 +299,13 @@
 </head>
 <body>
 
-<!-- Skip navigation for screen readers / keyboard users -->
 <a href="#context-panel" class="skip-link">Skip to node details</a>
 
 <div class="container">
 
     <header>
         <h1>Where Does Thinking Happen?</h1>
-        <p class="subtitle">An interactive map of human judgment and generative AI in academic writing</p>
+        <p class="subtitle">An interactive map of human judgment and generative AI in the argumentative essay</p>
         <p class="framing">
             Academic work is not one task but a sequence of cognitive decisions. This map shows where human thinking is essential, where AI can assist, and where responsibility cannot be outsourced.
             <strong><br>Click any stage. There is no single correct path.</strong>
@@ -329,12 +328,12 @@
             </div>
         </div>
         <p class="loop-note" id="loop-note">
-            Dashed curved arrows indicate common points where the research process loops back
+            Dashed curved arrows indicate common points where the process loops back
         </p>
-        <div id="map-container" role="region" aria-label="Research process diagram">
+        <div id="map-container" role="region" aria-label="Argumentative essay process diagram">
             <svg id="map-svg"
                  role="group"
-                 aria-label="Research process nodes. Use Tab to navigate between nodes and Enter or Space to select."
+                 aria-label="Argumentative essay process nodes. Use Tab to navigate between nodes and Enter or Space to select."
                  aria-describedby="loop-note">
             </svg>
         </div>
@@ -392,7 +391,7 @@
     <section class="class-use" aria-label="Class discussion activities">
         <h2>📚 For Class Discussion</h2>
         <ul>
-            <li><strong>Small Group Activity:</strong> In groups of 3–4, trace the path you actually took in your last research paper. Where did it diverge from this map?</li>
+            <li><strong>Small Group Activity:</strong> In groups of 3–4, trace the path you actually took in your last argumentative essay. Where did it diverge from this map?</li>
             <li><strong>Debate Prompt:</strong> Should "Draft & Revise" be blue or purple? Make your case using examples from your own writing process.</li>
             <li><strong>Thought Experiment:</strong> If you could only use AI for TWO stages, which would you choose and why?</li>
             <li><strong>Metacognitive Journal:</strong> Track one week of academic work. At which stages did you actually pause and think vs. operate on autopilot?</li>
@@ -473,57 +472,43 @@
     // ── NODE DATA ──────────────────────────────────────────────────────────────
     const nodes = [
         {
-            id: 'inquiry',
-            color: '#2980b9',       // darker blue for contrast on white text
-            label: 'Inquiry &\nQuestioning',
-            ariaLabel: 'Inquiry and Questioning',
-            description: 'The starting point of all research — noticing what puzzles you and shaping it into a focused, researchable question.',
-            humanStrengths: 'Humans bring lived experience, values, and the ability to notice what is absent or troubling in existing conversations. Deciding what is worth asking — and why — is a deeply personal intellectual act that reflects your disciplinary training and your own perspective.',
+            id: 'explore',
+            color: '#2980b9',
+            label: 'Explore\n& Focus',
+            ariaLabel: 'Explore and Focus',
+            description: 'The starting point — noticing what puzzles you, gathering background context, and shaping a broad interest into a focused, arguable research question.',
+            humanStrengths: 'Humans bring lived experience, values, and the ability to notice what is absent or troubling in existing conversations. Deciding what is worth asking — and why — is a deeply personal intellectual act. You also make strategic decisions about where to look for background information and when you have enough context to commit to a direction.',
             aiHelp: [
                 'Suggest related topics or angles you may not have considered',
-                'Help reframe a vague interest into a more specific question',
-                'Identify assumptions embedded in how you have phrased your question'
+                'Help reframe a vague interest into a more specific, arguable question',
+                'Summarize background reading to help you orient to a debate quickly'
             ],
-            risks: 'You end up researching what is algorithmically common rather than what genuinely matters to you. Your question becomes generic before inquiry has even begun.',
+            risks: 'You end up researching what is algorithmically common rather than what genuinely matters to you. Your question becomes generic before inquiry has even begun, and your background understanding stays shallow because you skimmed AI summaries instead of reading.',
             reflection: 'Who decides what counts as a good question — you, your discipline, or the patterns in an AI\'s training data?'
         },
         {
-            id: 'explore',
-            color: '#8e44ad',       // darker purple for contrast
-            label: 'Explore &\nSearch',
-            ariaLabel: 'Explore and Search',
-            description: 'Building context through broad reading and then actively searching databases and catalogs for credible, relevant evidence.',
-            humanStrengths: 'Humans make strategic decisions about where to search, which terms reflect the actual scholarly conversation, and when a source is worth pursuing. Recognizing a useful source when you find it requires disciplinary intuition that develops through practice.',
+            id: 'find',
+            color: '#8e44ad',
+            label: 'Find &\nEvaluate',
+            ariaLabel: 'Find and Evaluate',
+            description: 'Searching databases and catalogs for credible, relevant evidence — and critically assessing whether each source is trustworthy, relevant to your specific argument, and honest about its limitations.',
+            humanStrengths: 'Humans make strategic decisions about which search terms reflect the actual scholarly conversation and recognize when a source is worth pursuing. Evaluating a source requires contextual judgment — understanding why it might be biased, what agenda it serves, and whether it is trustworthy for your particular purpose.',
             aiHelp: [
                 'Suggest synonyms or related terms to broaden your search strategy',
                 'Explain how to use Boolean operators or database filters',
-                'Summarize a long article to help you decide if it is worth reading in full'
-            ],
-            risks: 'AI tools frequently hallucinate citations — generating plausible-sounding but entirely fabricated sources. Never use AI to produce a list of sources. Use library databases, Google Scholar, and your librarian.',
-            reflection: 'Where you search shapes what you find. What does your search strategy reveal about your assumptions going in?'
-        },
-        {
-            id: 'evaluate',
-            color: '#2980b9',
-            label: 'Evaluate\nSources',
-            ariaLabel: 'Evaluate Sources',
-            description: 'Assessing whether the sources you have found are credible, relevant to your specific argument, and honest about their limitations.',
-            humanStrengths: 'Humans apply contextual judgment — understanding why a source might be biased, what agenda it serves, and whether it is trustworthy for your particular purpose. This requires careful reading, not just checking surface credentials.',
-            aiHelp: [
                 'Help identify an author\'s credentials or institutional affiliation',
-                'Flag potential conflicts of interest in a source',
                 'Compare how different sources frame the same claim'
             ],
-            risks: 'You rely on surface markers of credibility — journal name, citation count, confident tone — without understanding methodological quality or the rhetorical moves a source is making.',
-            reflection: 'Can AI detect when a source is technically accurate but misleading? What would that kind of judgment actually require?'
+            risks: 'AI tools frequently hallucinate citations — generating plausible-sounding but entirely fabricated sources. Never use AI to produce a list of sources. You may also rely on surface markers of credibility — journal name, citation count, confident tone — without understanding methodological quality.',
+            reflection: 'Where you search shapes what you find. Can AI detect when a source is technically accurate but misleading? What would that kind of judgment actually require?'
         },
         {
             id: 'argument',
-            color: '#8e44ad',
-            label: 'Develop Your\nArgument',
-            ariaLabel: 'Develop Your Argument',
-            description: 'Forming a working hypothesis early on, then refining it into a clear thesis and logical structure as your evidence comes together.',
-            humanStrengths: 'Humans make judgments about what is true, what is worth defending, and what counts as persuasive to a specific audience. Your argument reflects your intellectual commitments — it cannot be outsourced without becoming someone else\'s argument.',
+            color: '#2980b9',
+            label: 'Build Your\nArgument',
+            ariaLabel: 'Build Your Argument',
+            description: 'Forming a working thesis, identifying your main reasons and supporting evidence, and organizing them into a logical structure that builds toward a clear claim.',
+            humanStrengths: 'Humans make judgments about what is true, what is worth defending, and what counts as persuasive to a specific audience. Your argument reflects your intellectual commitments — it cannot be outsourced without becoming someone else\'s argument. Choosing which reasons matter most and how to sequence them is itself philosophical thinking.',
             aiHelp: [
                 'Generate multiple thesis variations to react to and refine',
                 'Identify logical gaps or missing evidence in an outline',
@@ -533,34 +518,35 @@
             reflection: 'If an AI writes your thesis, whose argument is it? At what point does a claim become genuinely yours?'
         },
         {
+            id: 'challenge',
+            color: '#717d7e',
+            label: 'Challenge\nYour Argument',
+            ariaLabel: 'Challenge Your Argument',
+            description: 'Actively seeking out the strongest objections to your thesis, engaging with them seriously, and refining your argument in response — the heart of philosophical reasoning.',
+            humanStrengths: 'Humans exercise intellectual empathy — the ability to genuinely inhabit an opposing perspective and understand why a reasonable person would hold it. Knowing which counterarguments your audience will actually raise, and which deserve the most careful response, requires understanding the real stakes of a debate, not just its logical structure.',
+            aiHelp: [
+                'Generate objections you may not have considered',
+                'Identify weaknesses in your reasoning that you are too close to see',
+                'Suggest philosophical frameworks that challenge your assumptions'
+            ],
+            risks: 'AI tends to produce generic or strawman counterarguments that are easy to knock down. If you only engage with weak objections, your argument looks strong on the surface but is actually fragile — and any reader familiar with the debate will notice immediately.',
+            reflection: 'Are you engaging with the strongest version of the opposing view, or the version that is easiest to dismiss? Would someone who disagrees with you recognize their position in your paper?'
+        },
+        {
             id: 'draft',
-            color: '#717d7e',       // darker gray for contrast
+            color: '#8e44ad',
             label: 'Draft &\nRevise',
             ariaLabel: 'Draft and Revise',
-            description: 'Translating your argument into prose and then critically refining it — two stages that are deeply intertwined because writing is itself a form of thinking.',
-            humanStrengths: 'Humans develop voice, make rhetorical choices, and discover what they actually think through the act of writing. Revision requires honest self-criticism — knowing what to cut, what to keep, and when the argument actually works.',
+            description: 'Translating your argument into prose, integrating sources carefully, and then critically refining for argument, clarity, style, grammar, formatting, and submission requirements.',
+            humanStrengths: 'Humans develop voice, make rhetorical choices, and discover what they actually think through the act of writing. Revision requires honest self-criticism — knowing what to cut, what to keep, and when the argument actually works. Editing for clarity means ensuring every sentence earns its place in the argument.',
             aiHelp: [
                 'Suggest clearer phrasing for a sentence you are stuck on',
                 'Identify inconsistencies in tone or argument across sections',
+                'Catch grammar, punctuation, or formatting errors you have missed',
                 'Generate a transition between two paragraphs as a starting point'
             ],
-            risks: 'You outsource the cognitive work of translating thought into language and never develop a writing voice. Your prose becomes fluent but hollow — and you do not know what you think because you never had to figure it out.',
-            reflection: 'Is drafting just putting ideas into words, or is it how you figure out what you mean? What do you discover about your argument when you are forced to write it?'
-        },
-        {
-            id: 'share',
-            color: '#2980b9',
-            label: 'Share &\nDefend',
-            ariaLabel: 'Share and Defend',
-            description: 'Communicating your work to an audience and taking intellectual responsibility for it — in a presentation, a paper submission, or a class discussion.',
-            humanStrengths: 'Humans navigate audience expectations, respond to questions in real time, and stand behind their claims. When challenged, the ability to explain and defend your work is the final proof that the thinking was yours.',
-            aiHelp: [
-                'Help simplify complex ideas for a non-specialist audience',
-                'Generate an abstract or executive summary',
-                'Anticipate likely questions or counterarguments'
-            ],
-            risks: 'You present work you cannot defend. When challenged, the gap between your words and your actual understanding becomes immediately visible — to your audience and to you.',
-            reflection: 'If you cannot explain your work without AI assistance, is it really yours? What does intellectual ownership mean to you?'
+            risks: 'You outsource the cognitive work of translating thought into language and never develop a writing voice. Your prose becomes fluent but hollow — and you do not know what you think because you never had to figure it out. Over-relying on AI for editing means you stop learning to self-correct.',
+            reflection: 'Is drafting just putting ideas into words, or is it how you figure out what you mean? What do you discover about your argument when you are forced to write it yourself?'
         }
     ];
 
@@ -569,25 +555,23 @@
         [0, 1],
         [1, 2],
         [2, 3],
-        [3, 4],
-        [4, 5]
+        [3, 4]
     ];
 
     // Back-loop connections: [fromIndex, toIndex]
-    // Curve direction: 'up' bows above the line, 'down' bows below
     const backLinks = [
-        { from: 1, to: 0 },   // Explore → Inquiry
-        { from: 2, to: 1 },   // Evaluate → Explore
-        { from: 3, to: 1 },   // Argument → Explore
-        { from: 4, to: 3 },   // Draft → Argument
+        { from: 1, to: 0 },   // Find & Evaluate → Explore & Focus
+        { from: 2, to: 1 },   // Build Your Argument → Find & Evaluate
+        { from: 3, to: 2 },   // Challenge Your Argument → Build Your Argument
+        { from: 4, to: 2 },   // Draft & Revise → Build Your Argument
     ];
 
     // ── SVG SETUP ──────────────────────────────────────────────────────────────
     const SVG_W  = 1000;
     const SVG_H  = 320;
-    const R      = 52;        // node radius
+    const R      = 56;        // node radius — slightly larger for 5 nodes
     const CY     = 160;       // vertical center
-    const MARGIN = 90;        // left/right margin
+    const MARGIN = 100;       // left/right margin
 
     const svg = document.getElementById('map-svg');
     svg.setAttribute('width', SVG_W);
@@ -630,7 +614,6 @@
         const fp = nodePositions[fi];
         const tp = nodePositions[ti];
 
-        // Shorten line so it stops at circle edge
         const dx = tp.x - fp.x;
         const dy = tp.y - fp.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -658,7 +641,6 @@
         const fp = nodePositions[from];
         const tp = nodePositions[to];
 
-        // Alternate bowing above/below so loops don't overlap
         const bowDir = idx % 2 === 0 ? -1 : 1;
         const bowAmount = 70 + idx * 18;
 
@@ -686,7 +668,6 @@
         g.setAttribute('aria-pressed', 'false');
         g.setAttribute('data-index', i);
 
-        // Circle
         const circle = document.createElementNS(svgNS, 'circle');
         circle.setAttribute('cx', x);
         circle.setAttribute('cy', y);
@@ -710,10 +691,7 @@
             g.appendChild(t);
         });
 
-        // Click
         g.addEventListener('click', () => selectNode(i));
-
-        // Keyboard: Enter or Space
         g.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -728,7 +706,6 @@
     function selectNode(index) {
         const node = nodes[index];
 
-        // Update ARIA + active state on all nodes
         document.querySelectorAll('.map-node').forEach((g, i) => {
             g.classList.remove('active');
             g.setAttribute('aria-pressed', 'false');
@@ -738,7 +715,6 @@
         activeG.classList.add('active');
         activeG.setAttribute('aria-pressed', 'true');
 
-        // Populate panel
         const panel = document.getElementById('context-panel');
         panel.classList.remove('hidden');
         panel.style.borderLeftColor = node.color;
@@ -762,7 +738,6 @@
         document.getElementById('risks').textContent = node.risks;
         document.getElementById('reflection-question').textContent = node.reflection;
 
-        // Smooth scroll & move focus to panel for screen readers
         panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         panel.focus();
     }
