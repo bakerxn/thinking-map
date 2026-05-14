@@ -307,7 +307,7 @@
         <h1>Where Does Thinking Happen?</h1>
         <p class="subtitle">An interactive map of human judgment and generative AI in the argumentative essay</p>
         <p class="framing">
-            Academic work is not one task but a sequence of cognitive decisions. This map shows where human thinking is essential, where AI can assist, and where responsibility cannot be outsourced.
+            Academic work is not one task but a sequence of cognitive decisions. <br>This map shows where human thinking is essential, where AI can assist, and where responsibility cannot be outsourced.
             <strong><br>Click any stage. There is no single correct path.</strong>
         </p>
     </header>
@@ -328,7 +328,7 @@
             </div>
         </div>
         <p class="loop-note" id="loop-note">
-            Dashed curved arrows indicate common points where the process loops back
+            Dashed arrows indicate common points where the process loops back.
         </p>
         <div id="map-container" role="region" aria-label="Argumentative essay process diagram">
             <svg id="map-svg"
@@ -345,7 +345,7 @@
              aria-atomic="true"
              tabindex="-1">
         <div class="placeholder-text" id="placeholder-text">
-            👆 Click any stage above to explore where thinking happens
+            Click any stage above to explore where thinking happens
         </div>
         <div id="context-content" style="display:none;" aria-label="Stage details">
             <h2 id="node-title"></h2>
@@ -413,12 +413,12 @@
              aria-labelledby="transparency-btn">
             <h3>Tools Used</h3>
             <ul>
-                <li><strong>Claude (Anthropic)</strong> — Conceptual framework development, content generation, code structure</li>
+                <li><strong>Claude (Anthropic)</strong> — Conceptual framework development, code structure</li>
                 <li><strong>Human (Research & Engagement Librarian)</strong> — Pedagogical design, course alignment, final editorial decisions</li>
             </ul>
             <h3>Process</h3>
-            <p><strong>1. Human Input:</strong> The librarian provided a course description, learning objectives, and initial concept for an interactive map exploring cognitive labor in academic writing.</p>
-            <p><strong>2. AI Assistance:</strong> Claude generated the node structure, content for each stage, and the HTML/CSS/JavaScript implementation.</p>
+            <p><strong>1. Human Input:</strong> The librarian provided a course description, learning objectives, content for each stage, and initial concept for an interactive map exploring cognitive labor in academic writing.</p>
+            <p><strong>2. AI Assistance:</strong> Claude generated the node structure and the HTML/CSS/JavaScript implementation.</p>
             <p><strong>3. Human Refinement:</strong> The librarian reviewed all content for accuracy, pedagogical appropriateness, and alignment with course philosophy.</p>
             <h3>What Was Human-Driven</h3>
             <ul>
@@ -457,7 +457,7 @@
     <span style="color:#bdc3c7;" aria-hidden="true">|</span>
     <span>
         Created by
-        <a href="https://www.linkedin.com/in/nicole-baker/"
+        <a href="nicolebaker.dev"
            target="_blank"
            rel="noopener noreferrer"
            aria-label="Nicole Baker MSEd MSLIS LinkedIn profile (opens in new tab)"
@@ -476,30 +476,30 @@
             color: '#2980b9',
             label: 'Explore\n& Focus',
             ariaLabel: 'Explore and Focus',
-            description: 'The starting point — noticing what puzzles you, gathering background context, and shaping a broad interest into a focused, arguable research question.',
-            humanStrengths: 'Humans bring lived experience, values, and the ability to notice what is absent or troubling in existing conversations. Deciding what is worth asking — and why — is a deeply personal intellectual act. You also make strategic decisions about where to look for background information and when you have enough context to commit to a direction.',
+            description: 'The starting point: noticing what puzzles you, gathering background context, and shaping a broad interest into a focused, arguable research question.',
+            humanStrengths: 'Humans bring lived experience, values, and the ability to notice what is absent or troubling in existing conversations. Deciding what is worth asking, and why, is a deeply personal intellectual act. You also make strategic decisions about where to look for background information and when you have enough context to commit to a direction.',
             aiHelp: [
                 'Suggest related topics or angles you may not have considered',
                 'Help reframe a vague interest into a more specific, arguable question',
                 'Summarize background reading to help you orient to a debate quickly'
             ],
             risks: 'You end up researching what is algorithmically common rather than what genuinely matters to you. Your question becomes generic before inquiry has even begun, and your background understanding stays shallow because you skimmed AI summaries instead of reading.',
-            reflection: 'Who decides what counts as a good question — you, your discipline, or the patterns in an AI\'s training data?'
+            reflection: 'Who decides what counts as a good question... you, your discipline, or the patterns in an AI\'s training data?'
         },
         {
             id: 'find',
             color: '#8e44ad',
             label: 'Find &\nEvaluate',
             ariaLabel: 'Find and Evaluate',
-            description: 'Searching databases and catalogs for credible, relevant evidence — and critically assessing whether each source is trustworthy, relevant to your specific argument, and honest about its limitations.',
-            humanStrengths: 'Humans make strategic decisions about which search terms reflect the actual scholarly conversation and recognize when a source is worth pursuing. Evaluating a source requires contextual judgment — understanding why it might be biased, what agenda it serves, and whether it is trustworthy for your particular purpose.',
+            description: 'Searching databases and catalogs for credible, relevant evidence,  and critically assessing whether each source is trustworthy, relevant to your specific argument, and honest about its limitations.',
+            humanStrengths: 'Humans make strategic decisions about which search terms reflect the actual scholarly conversation and recognize when a source is worth pursuing. Evaluating a source requires contextual judgment: understanding why it might be biased, what agenda it serves, and whether it is trustworthy for your particular purpose.',
             aiHelp: [
                 'Suggest synonyms or related terms to broaden your search strategy',
                 'Explain how to use Boolean operators or database filters',
                 'Help identify an author\'s credentials or institutional affiliation',
                 'Compare how different sources frame the same claim'
             ],
-            risks: 'AI tools frequently hallucinate citations — generating plausible-sounding but entirely fabricated sources. Never use AI to produce a list of sources. You may also rely on surface markers of credibility — journal name, citation count, confident tone — without understanding methodological quality.',
+            risks: 'AI tools frequently hallucinate citations, generating plausible-sounding but entirely fabricated sources. Never use AI to produce a list of sources. You may also rely on surface markers of credibility such as journal name, citation count, confident tone, without understanding methodological quality.',
             reflection: 'Where you search shapes what you find. Can AI detect when a source is technically accurate but misleading? What would that kind of judgment actually require?'
         },
         {
@@ -508,13 +508,13 @@
             label: 'Build Your\nArgument',
             ariaLabel: 'Build Your Argument',
             description: 'Forming a working thesis, identifying your main reasons and supporting evidence, and organizing them into a logical structure that builds toward a clear claim.',
-            humanStrengths: 'Humans make judgments about what is true, what is worth defending, and what counts as persuasive to a specific audience. Your argument reflects your intellectual commitments — it cannot be outsourced without becoming someone else\'s argument. Choosing which reasons matter most and how to sequence them is itself philosophical thinking.',
+            humanStrengths: 'Humans make judgments about what is true, what is worth defending, and what counts as persuasive to a specific audience. Your argument reflects your intellectual commitments; it cannot be outsourced without becoming someone else\'s argument. Choosing which reasons matter most and how to sequence them is itself philosophical thinking.',
             aiHelp: [
                 'Generate multiple thesis variations to react to and refine',
                 'Identify logical gaps or missing evidence in an outline',
-                'Suggest organizational patterns suited to your argument type'
+                'Suggest ways to order your reasons and structure the overall essay'
             ],
-            risks: 'Your paper is well-organized but does not build toward anything. You have structure without substance — and a thesis you cannot explain or defend in your own words.',
+            risks: 'Your paper is well-organized but does not build toward anything. You have structure without substance, and a thesis you cannot explain or defend in your own words.',
             reflection: 'If an AI writes your thesis, whose argument is it? At what point does a claim become genuinely yours?'
         },
         {
@@ -522,14 +522,14 @@
             color: '#717d7e',
             label: 'Challenge\nYour Argument',
             ariaLabel: 'Challenge Your Argument',
-            description: 'Actively seeking out the strongest objections to your thesis, engaging with them seriously, and refining your argument in response — the heart of philosophical reasoning.',
-            humanStrengths: 'Humans exercise intellectual empathy — the ability to genuinely inhabit an opposing perspective and understand why a reasonable person would hold it. Knowing which counterarguments your audience will actually raise, and which deserve the most careful response, requires understanding the real stakes of a debate, not just its logical structure.',
+            description: 'Actively seeking out the strongest objections to your thesis, engaging with them seriously, and refining your argument in response is the heart of philosophical reasoning.',
+            humanStrengths: 'Humans exercise intellectual empathy: the ability to genuinely inhabit an opposing perspective and understand why a reasonable person would hold it. Knowing which counterarguments your audience will actually raise, and which deserve the most careful response, requires understanding the real stakes of a debate, not just its logical structure.',
             aiHelp: [
                 'Generate objections you may not have considered',
                 'Identify weaknesses in your reasoning that you are too close to see',
                 'Suggest philosophical frameworks that challenge your assumptions'
             ],
-            risks: 'AI tends to produce generic or strawman counterarguments that are easy to knock down. If you only engage with weak objections, your argument looks strong on the surface but is actually fragile — and any reader familiar with the debate will notice immediately.',
+            risks: 'AI tends to produce generic or counterarguments that are easy to knock down. If you only engage with weak objections, your argument looks strong on the surface but is actually fragile, and any reader familiar with the debate will notice immediately.',
             reflection: 'Are you engaging with the strongest version of the opposing view, or the version that is easiest to dismiss? Would someone who disagrees with you recognize their position in your paper?'
         },
         {
@@ -538,14 +538,14 @@
             label: 'Draft &\nRevise',
             ariaLabel: 'Draft and Revise',
             description: 'Translating your argument into prose, integrating sources carefully, and then critically refining for argument, clarity, style, grammar, formatting, and submission requirements.',
-            humanStrengths: 'Humans develop voice, make rhetorical choices, and discover what they actually think through the act of writing. Revision requires honest self-criticism — knowing what to cut, what to keep, and when the argument actually works. Editing for clarity means ensuring every sentence earns its place in the argument.',
+            humanStrengths: 'Humans develop voice, make rhetorical choices, and discover what they actually think through the act of writing. Revision requires honest self-criticism: knowing what to cut, what to keep, and when the argument actually works. Editing for clarity means ensuring every sentence earns its place in the argument.',
             aiHelp: [
                 'Suggest clearer phrasing for a sentence you are stuck on',
                 'Identify inconsistencies in tone or argument across sections',
                 'Catch grammar, punctuation, or formatting errors you have missed',
                 'Generate a transition between two paragraphs as a starting point'
             ],
-            risks: 'You outsource the cognitive work of translating thought into language and never develop a writing voice. Your prose becomes fluent but hollow — and you do not know what you think because you never had to figure it out. Over-relying on AI for editing means you stop learning to self-correct.',
+            risks: 'You outsource the cognitive work of translating thought into language and never develop a writing voice. Your prose becomes fluent but hollow, and you do not know what you think because you never had to figure it out. Over-relying on AI for editing means you stop learning to self-correct.',
             reflection: 'Is drafting just putting ideas into words, or is it how you figure out what you mean? What do you discover about your argument when you are forced to write it yourself?'
         }
     ];
